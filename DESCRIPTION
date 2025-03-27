@@ -1,0 +1,21 @@
+Package: zoolabs
+Title: Zoo Biology Lab Modules
+Version: 0.1.0
+Date: 2025-03-27
+Authors@R: 
+    person("Alicia", "Rich", email = "aliciarich@unomaha.edu", role = c("aut", "cre"))
+Description: This package contains the tools and templates used to complete different lab modules for the Zoo Biology course at UNO with Dr. Rich.
+Depends: R (>= 4.2)
+Imports: 
+    knitr, conflicted, downloadthis, fontawesome, glue, ggplot2, ggtext, 
+    heatmaply, here, htmltools, htmlwidgets, kableExtra, kinship2, paletteer, 
+    pedtools, pedsuite, plotly, reactable, reactablefmtr, rmarkdown, 
+    scales, shiny, showtext, thematic, tidyverse, tippy, usethis, visNetwork
+Suggests: 
+    testthat, roxygen2
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+URL: https://github.com/Rich-Molecular-Health-Lab/rich-courses
