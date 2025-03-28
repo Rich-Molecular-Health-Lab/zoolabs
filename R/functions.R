@@ -1,20 +1,3 @@
-#' @importFrom lubridate floor_date
-#' @importFrom lubridate ceiling_date
-#' @importFrom lubridate interval
-#' @importFrom lubridate as.period
-#' @importFrom lubridate as.numeric
-#' @importFrom dplyr filter
-#' @importFrom dplyr distinct
-#' @importFrom dplyr mutate
-#' @importFrom dplyr left_join
-#' @importFrom dplyr select
-#' @importFrom dplyr arrange
-#' @importFrom dplyr summarize
-#' @importFrom dplyr row_number
-#' @importFrom dplyr rename
-#' @importFrom purrr pmap
-#' @importFrom tidyr pivot_wider
-#' @importFrom tidyr unnest
 #' Calculate Age from Dates
 #' This returns age in years as an integer given a date of birth and a relative end date, both formatted as date vectors.
 calculate_age <- function(birth, date) {

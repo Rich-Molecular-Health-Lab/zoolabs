@@ -1,14 +1,3 @@
-#' @importFrom dplyr intersect
-#' @importFrom dplyr setdiff
-#' @importFrom htmlwidgets saveWidget
-#' @importFrom pedtools plot.ped
-#' @importFrom plotly plot_ly
-#' @importFrom plotly add_trace
-#' @importFrom plotly layout
-#' @importFrom purrr keep_at
-#' @importFrom purrr map_depth
-#' @importFrom purrr list_assign
-#' @importFrom stats setNames
 #' Standardize Color Palettes for Population Data
 #' Create color palettes to standardize color coding based on sex, status, and location across plots, pedigrees, and tables.
 #' These functions will transfer standardized palettes between list and vector formats to integrate smoothly across pedtools, plotly, ggplot, and reactable.
@@ -316,16 +305,6 @@ subset_matrix_living <- function(matrix, studbook) {
 #' These are a more elaborate and interactive alternative for visualizing the pedigree plots.
 #' They can organize the graphics as a clustered network or a hierarchy by generation.
 #' Some of the functions automatically export an html version of the graphic to your working directory.
-#' @importFrom visNetwork visNetwork
-#' @importFrom visNetwork visSave
-#' @importFrom visNetwork visNodes
-#' @importFrom visNetwork visInteraction
-#' @importFrom visNetwork addFontAwesome
-#' @importFrom pedtools founders
-#' @importFrom pedtools leaves
-#' @importFrom pedtools nonfounders
-#' @importFrom pedtools parents
-#' @importFrom pedtools commonDescendants
 #' @rdname ped_visnet
 #' @export
 pedigree_levels <- function(pedigree, studbook) {

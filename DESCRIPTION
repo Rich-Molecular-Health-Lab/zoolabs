@@ -12,8 +12,9 @@ Imports:
     pedtools, pedsuite, plotly, reactable, reactablefmtr, rmarkdown, 
     scales, shiny, showtext, thematic, tidyverse, tippy, usethis, visNetwork
 Suggests: 
-    testthat, roxygen2
+    testthat, roxygen2, knitr, rmarkdown
 License: GPL-3
+VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

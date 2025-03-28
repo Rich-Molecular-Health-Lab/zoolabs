@@ -1,16 +1,3 @@
-#' @importFrom reactable reactable
-#' @importFrom reactable colDef
-#' @importFrom reactable colGroup
-#' @importFrom reactablefmtr color_tiles
-#' @importFrom reactablefmtr bubble_grid
-#' @importFrom reactablefmtr pill_buttons
-#' @importFrom reactablefmtr data_bars
-#' @importFrom reactablefmtr flatly
-#' @importFrom paletteer paletteer_d
-#' @importFrom scales label_date
-#' @importFrom scales label_percent
-#' @importFrom scales label_number
-#' @importFrom tippy tippy
 #' Reactable Column Defs
 #' These helper functions generate formatted column definitions for reactable tables to summarize studbook, pedigree, and demographic data.
 #' @rdname react_cols
@@ -318,37 +305,29 @@ kin.cols <- function() {
     ),
     format = colFormat(digits = 0)
     ),
-    Ne_over_N = colDef(header = tippy("Ne/N",
-                                      tooltip = "Effective population size relative to population size"
+    Ne_over_N = colDef(header = tippy("Ne/N", tooltip = "Effective population size relative to population size"
     ),
     format = colFormat(digits = 1)
     ),
-    n_founder_reps = colDef(header = tippy("Founders",
-                                           tooltip = "Number of founders represented in the current population" )
+    n_founder_reps = colDef(header = tippy("Founders", tooltip = "Number of founders represented in the current population" )
     ),
-    FGE = colDef(header = tippy("FGE",
-                                tooltip = "Founder genome equivalents: expressed in units of the number of wild-caught, unrelated individuals (“founders”) that would produce the same gene diversity as the current population"
+    FGE = colDef(header = tippy("FGE", tooltip = "Founder genome equivalents: expressed in units of the number of wild-caught, unrelated individuals (“founders”) that would produce the same gene diversity as the current population"
     ),
     format = colFormat(digits = 1)
     ),
-    F_mean = colDef(header = tippy("F",
-                                   tooltip = "Mean inbreeding level" )
+    F_mean = colDef(header = tippy("F", tooltip = "Mean inbreeding level" )
     ),
-    mean_gen = colDef(header = tippy("Generations",
-                                     tooltip = "Mean generation for living individuals"
+    mean_gen = colDef(header = tippy("Generations", tooltip = "Mean generation for living individuals"
     ),
     format = colFormat(digits = 1)
     ),
-    delta_F = colDef(header = tippy("ΔF",
-                                    tooltip = "ΔF is the per–generation increase in inbreeding" )
+    delta_F = colDef(header = tippy("ΔF", tooltip = "ΔF is the per–generation increase in inbreeding" )
     ),
-    GD = colDef(header = tippy("GD %",
-                               tooltip = "Gene diversity: current percentage of founding gene diversity retained"
+    GD = colDef(header = tippy("GD %", tooltip = "Gene diversity: current percentage of founding gene diversity retained"
     ),
     format = colFormat(percent = TRUE)
     ),
-    MK = colDef(header = tippy("MK",
-                               tooltip = "Population mean kinship" )
+    MK = colDef(header = tippy("MK", tooltip = "Population mean kinship" )
     )
   )
 }

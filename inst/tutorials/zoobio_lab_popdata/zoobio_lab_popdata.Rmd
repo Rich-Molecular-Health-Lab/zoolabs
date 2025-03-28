@@ -1,0 +1,46 @@
+---
+title: "Population Data Management Lab"
+author: "Dr. Rich"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme:
+      bootswatch: litera
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    code_folding: "hide"
+    fig_caption: true
+    df_print: paged
+vignette: >
+  %\VignetteIndexEntry{Population Data Management Lab}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  echo    = TRUE,
+  include = TRUE,
+  eval    = TRUE,
+  comment = ""
+)
+palette <- c("#D53288FF", "#DC8045FF", "#21B14BFF", "#008AC2FF", "#3F459BFF")
+colors  <- list(
+  f    = "#D53288FF",
+  m    = "#3F459BFF",
+  u    = "#21B14BFF",
+  sire = "#3F459B33",
+  dam  = "#D5328833",
+  emph = "#DC8045FF",
+  seq  = "rcartocolor::Sunset",
+  div  = "rcartocolor::Temps",
+  rand = "khroma::stratigraphy"
+)
+```
+
+
