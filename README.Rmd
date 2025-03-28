@@ -31,16 +31,25 @@ This package includes all the **functions, datasets, color palettes, interactive
 - \U0001F3A8 **Standardized color palettes** for sex, status, and location
 - 📦 Supports `learnr` modules, R Markdown labs, and Shiny apps
 
-## 🚀 Installation
+## 🚀 Installation {.tabset}
 
-To install the development version of **`zoolabs`** from GitHub, use:
+### If you have not used this package yet
+
+Install **`zoolabs`** on your local `R Studio` by running the following from the console:
 
 ```{r}
-# install.packages("pak") # if not already installed
+install.packages("pak")
+```
+
+Then run this from the same console:
+
+```{r}
 pak::pak("Rich-Molecular-Health-Lab/zoolabs")
 ```
 
-> You'll only need to install this package once per machine. After installing, you can load it in any session with:
+### After installing for first use
+
+Load the package each time you want to use a lab tutorial in your session by copying and pasting the following into your console:
 
 ```{r}
 library(zoolabs)
@@ -52,6 +61,10 @@ Once installed, you’ll be able to:
 - Use all core functions like `plot_census()`, `lifeTab()`, and `ped_network()`
 - Load demo data like `studbook.tsv` via `system.file()`
 - Launch `learnr` tutorials using:
+
+### To load the PopData Lab Tutorial
+
+Copy and paste the following into your console (after loading the `zoolabs` package above):
 
 ```{r}
 learnr::run_tutorial("popdata", package = "zoolabs")
