@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/aliciamrich/zoolabs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aliciamrich/zoolabs/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/Rich-Molecular-Health-Lab/zoolabs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Rich-Molecular-Health-Lab/zoolabs/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `zoolabs` is a teaching package for **Zoo Biology students at the
@@ -51,6 +51,13 @@ session by copying and pasting the following into your console:
 ``` r
 library(zoolabs)
 ```
+
+### Extra Hint
+
+Here is a screen grab of what the console will look like after you run
+each of these code chunks the first time:
+
+<img src="man/figures/installation_demo.png" align="center" height="500"/>
 
 ## Usage
 

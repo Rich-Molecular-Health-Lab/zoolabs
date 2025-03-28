@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # zoolabs <img src="man/figures/logo_richlab.png" align="right" height="138"/>
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/aliciamrich/zoolabs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aliciamrich/zoolabs/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/Rich-Molecular-Health-Lab/zoolabs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Rich-Molecular-Health-Lab/zoolabs/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `zoolabs` is a teaching package for **Zoo Biology students at the University of Nebraska Omaha**, designed and maintained by Dr. Alicia Rich.
@@ -55,6 +55,14 @@ Load the package each time you want to use a lab tutorial in your session by cop
 library(zoolabs)
 ```
 
+### Extra Hint
+
+Here is a screen grab of what the console will look like after you run each of these code chunks the first time:  
+  
+<img src="man/figures/installation_demo.png" align="center" height="500"/>
+   
+  
+  
 ## Usage
 
 Once installed, you’ll be able to:
