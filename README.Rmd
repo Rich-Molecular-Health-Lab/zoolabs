@@ -37,13 +37,13 @@ This package includes all the **functions, datasets, color palettes, interactive
 
 Install **`zoolabs`** on your local `R Studio` by running the following from the console:
 
-```{r}
+```{r eval=FALSE}
 install.packages("pak")
 ```
 
 Then run this from the same console:
 
-```{r}
+```{r eval=FALSE}
 pak::pak("Rich-Molecular-Health-Lab/zoolabs")
 ```
 
@@ -51,7 +51,7 @@ pak::pak("Rich-Molecular-Health-Lab/zoolabs")
 
 Load the package each time you want to use a lab tutorial in your session by copying and pasting the following into your console:
 
-```{r}
+```{r eval=FALSE}
 library(zoolabs)
 ```
 
@@ -66,7 +66,7 @@ Once installed, you’ll be able to:
 
 Copy and paste the following into your console (after loading the `zoolabs` package above):
 
-```{r}
+```{r eval=FALSE}
 learnr::run_tutorial("popdata", package = "zoolabs")
 ```
 

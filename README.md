@@ -1,54 +1,85 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# zoolabs
+# zoolabs <img src="man/figures/logo_richlab.png" align="right" height="138"/>
 
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/aliciamrich/zoolabs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aliciamrich/zoolabs/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of zoolabs is to …
+`zoolabs` is a teaching package for **Zoo Biology students at the
+University of Nebraska Omaha**, designed and maintained by Dr. Alicia
+Rich.
 
-## Installation
+This package includes all the **functions, datasets, color palettes,
+interactive tables, and plotting tools** needed to complete population
+management lab modules using R. It also supports `learnr` tutorials and
+Shiny-based apps for interactive learning.
 
-You can install the development version of zoolabs from
-[GitHub](https://github.com/) with:
+## 001F9F0 Features
+
+- 001F9EC **Pedigree visualization** with `pedtools` and `visNetwork`
+- 001F4C8 **Population viability metrics** including lambda, life
+  tables, and kinship
+- 001F4CA **Interactive demographic tables** using `reactable`
+- 001F3A8 **Standardized color palettes** for sex, status, and location
+- 📦 Supports `learnr` modules, R Markdown labs, and Shiny apps
+
+## 🚀 Installation
+
+### If you have not used this package yet
+
+Install **`zoolabs`** on your local `R Studio` by running the following
+from the console:
 
 ``` r
-# install.packages("pak")
-pak::pak("aliciamrich/zoolabs")
+install.packages("pak")
 ```
 
-## Example
+Then run this from the same console:
 
-This is a basic example which shows you how to solve a common problem:
+``` r
+pak::pak("Rich-Molecular-Health-Lab/zoolabs")
+```
+
+### After installing for first use
+
+Load the package each time you want to use a lab tutorial in your
+session by copying and pasting the following into your console:
 
 ``` r
 library(zoolabs)
-## basic example code
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+## 001F4D8 Usage
+
+Once installed, you’ll be able to: - Use all core functions like
+`plot_census()`, `lifeTab()`, and `ped_network()` - Load demo data like
+`studbook.tsv` via `system.file()` - Launch `learnr` tutorials using:
+
+### To load the PopData Lab Tutorial
+
+Copy and paste the following into your console (after loading the
+`zoolabs` package above):
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+learnr::run_tutorial("popdata", package = "zoolabs")
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+## 001F4CE Resources
 
-You can also embed plots, for example:
+- Course Site:
+  [rich-molecular-health-lab.github.io](https://github.com/Rich-Molecular-Health-Lab/rich-courses)
+- Issue Tracker: [GitHub
+  Issues](https://github.com/Rich-Molecular-Health-Lab/zoolabs/issues)
+- Maintainer: [Alicia Rich](mailto:aliciarich@unomaha.edu)
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+## 001F4C4 License
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+This project is licensed under the **GPL-3** license.
+
+------------------------------------------------------------------------
+
+*This package is intended for educational use by UNO students enrolled
+in BIOL 4130: Zoo Biology.*
