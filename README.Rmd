@@ -55,7 +55,7 @@ Load the package each time you want to use a lab tutorial in your session by cop
 library(zoolabs)
 ```
 
-## \U0001F4D8 Usage
+## Usage
 
 Once installed, you’ll be able to:
 - Use all core functions like `plot_census()`, `lifeTab()`, and `ped_network()`
@@ -70,13 +70,13 @@ Copy and paste the following into your console (after loading the `zoolabs` pack
 learnr::run_tutorial("popdata", package = "zoolabs")
 ```
 
-## \U0001F4CE Resources
+## Resources
 
 - Course Site: [rich-molecular-health-lab.github.io](https://github.com/Rich-Molecular-Health-Lab/rich-courses)
 - Issue Tracker: [GitHub Issues](https://github.com/Rich-Molecular-Health-Lab/zoolabs/issues)
 - Maintainer: [Alicia Rich](mailto:aliciarich@unomaha.edu)
 
-## \U0001F4C4 License
+## License
 
 This project is licensed under the **GPL-3** license.
 

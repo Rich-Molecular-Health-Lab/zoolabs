@@ -52,7 +52,7 @@ session by copying and pasting the following into your console:
 library(zoolabs)
 ```
 
-## 001F4D8 Usage
+## Usage
 
 Once installed, you’ll be able to: - Use all core functions like
 `plot_census()`, `lifeTab()`, and `ped_network()` - Load demo data like
@@ -67,7 +67,7 @@ Copy and paste the following into your console (after loading the
 learnr::run_tutorial("popdata", package = "zoolabs")
 ```
 
-## 001F4CE Resources
+## Resources
 
 - Course Site:
   [rich-molecular-health-lab.github.io](https://github.com/Rich-Molecular-Health-Lab/rich-courses)
@@ -75,7 +75,7 @@ learnr::run_tutorial("popdata", package = "zoolabs")
   Issues](https://github.com/Rich-Molecular-Health-Lab/zoolabs/issues)
 - Maintainer: [Alicia Rich](mailto:aliciarich@unomaha.edu)
 
-## 001F4C4 License
+## License
 
 This project is licensed under the **GPL-3** license.
 
