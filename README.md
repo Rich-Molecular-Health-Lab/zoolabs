@@ -54,9 +54,12 @@ library(zoolabs)
 
 ## Usage
 
-Once installed, you’ll be able to: - Use all core functions like
-`plot_census()`, `lifeTab()`, and `ped_network()` - Load demo data like
-`studbook.tsv` via `system.file()` - Launch `learnr` tutorials using:
+Once installed, you’ll be able to:
+
+- Use all core functions like `plot_census()`, `lifeTab()`, and
+  `ped_network()`
+- Load demo data like `studbook.tsv` via `system.file()`
+- Launch `learnr` tutorials using:
 
 ### To load the PopData Lab Tutorial
 
