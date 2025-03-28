@@ -1,64 +1,33 @@
 ---
 title: "Population Data Management Lab"
-author: "Alicia Rich"
-output:
-  html_document:
-    theme:
-      bootswatch: litera
-    toc: true
-    toc_float:
-      collapsed: true
-      smooth_scroll: true
-    code_folding: "hide"
-    fig_caption: true
-    df_print: paged
-params:
-  course: "zoobio"
-  semester: "spring25"
-  group: "MakeupVersion"
-  
+tutorial:
+  id: "popdata"
+  version: 1.0
+author: "Dr. Rich"
+date: "`r Sys.Date()`"
+output: learnr::tutorial
+runtime: shiny_prerendered
 ---
 
-# Makeup Version of the Population Data Management Lab
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  echo    = TRUE,
+  include = TRUE,
+  eval    = TRUE,
+  comment = ""
+)
+theme_set(theme_classic())
+thematic_rmd()
+thematic_on(accent = "#8785B2FF", fg = "black")
+font_add_google("Noto Sans Symbols", family = "NotoSym")
+showtext_auto()
 
->The code below should all run without any problem once you have installed the necessary packages. You will analyze the studbook for the Pygmy Slow Loris Provisional SSP. Examine each of the tables and figures created and answer the prompts to produce a report for submission.
-
-
-```{r global, include = FALSE}
-library(knitr)
-library(conflicted)
-library(downloadthis)
-library(fontawesome)
-library(glue)
-library(ggplot2)
-library(ggtext)
-library(heatmaply)
-library(here)
-library(htmltools)
-library(htmlwidgets)
-library(kableExtra)
-library(kinship2)
-library(paletteer)
-library(pedtools)
-library(pedsuite)
-library(plotly)
-library(reactable)
-library(reactablefmtr)
-library(rmarkdown)
-library(scales)
-library(shiny)
-library(showtext)
-library(thematic)
-library(tidyverse)
-library(tippy)
-library(usethis)
-library(visNetwork)
-
-source(system.file("R", "conflicts.R" , package = "zooBioTools" ))
-source(system.file("R", "setup.R"     , package = "zooBioTools" ))
-source(system.file("R", "functions.R" , package = "zooBioTools" ))
-source(system.file("R", "plots.R"     , package = "zooBioTools" ))
-source(system.file("R", "reactables.R", package = "zooBioTools" ))
+colors   <- palette_zoolabs()
+col.pal  <- set_plotly_pal(colors)
+fill.pal <- lighten_palette(col.pal)
 ```
 
 # Format Studbook Data
@@ -66,9 +35,9 @@ source(system.file("R", "reactables.R", package = "zooBioTools" ))
 Run the code below to automatically import and format studbook data for the Pygmy Slow Loris.
 
 ```{r}
-studbook <- read_tsv(system.file("extdata", "studbook.tsv", package = "zooBioTools")) %>%
+studbook <- read_tsv(system.file("extdata", "studbook.tsv", package = "zoolabs")) %>%
   mutate(across(c(DateBirth, DateDeath),  ~ ymd(.)))
-timeline <- read_tsv(system.file("extdata", "timeline.tsv", package = "zooBioTools")) %>%
+timeline <- read_tsv(system.file("extdata", "timeline.tsv", package = "zoolabs")) %>%
   mutate(across(c(StartLoc, Date, EndLoc), ~ ymd(.)))
 
 living   <- living(studbook)
@@ -80,7 +49,7 @@ deceased <- deceased(studbook)
 Let's take a glimpse of our formatted studbook now.
 
 ```{r, out.width="100%"}
-studbook.tbl <- studbook %>% studbook.react(., studbook.cols(.), groupBy = "Status")
+studbook.tbl <- studbook %>% studbook_react(., studbook.cols(.), groupBy = "Status")
 
 save_reactable_test(studbook.tbl, "studbook_a.html")
 studbook.tbl
@@ -93,10 +62,8 @@ studbook.tbl
 Let's look at the basic population size over time to begin quantifying growth rate and assessing overall population viability.
 
 ```{r}
-raw.counts <- census(timeline, studbook, "years")
-population.plot <- plot_census(raw.counts, 
-                               colors, 
-                               "Pygmy Loris Population Trends 1966-2025")
+raw.counts      <- census(timeline, studbook, "years")
+population.plot <- plot_census(raw.counts, colors, "Pygmy Loris Population Trends 1966-2025")
 population.plot
 ```
 
@@ -106,7 +73,7 @@ Now we will use annual birth counts to follow the standard method for computing 
 
 ```{r}
 lifeTab.5yrs <- cohort_lifeTab(timeline, studbook, 1985, 2024, 5, 22)
-lambda.plot  <- plot_lambda(lifeTab.5yrs)
+lambda.plot  <- plot_lambda(lifeTab.5yrs, "Population Growth Rates by Cohort")
 lambda.plot
 ```
 
@@ -150,9 +117,7 @@ includes_living <- c("_comp5")
 
 ```{r, out.width="100%", dev='svg'}
 ped.living  <- keep_at(pedig, includes_living)
-
-ped.living <- ped.living[[1]]
-
+ped.living  <- ped.living[[1]]
 famid(ped.living) <- "Current"
 
 plot_pedigrees(ped.living, "Pedigree of Living Population", studbook)
@@ -163,7 +128,7 @@ plot_pedigrees(ped.living, "Pedigree of Living Population", studbook)
 I don't love the pedtools graphics system and lack of customization/interactivity, so if we want to look more closely at the details of relationships and clustering across a complex pedigree, we can transfer the data produced by pedtools into some other visualization packages. In this case, we will use `visNetwork` Run the chunk below to render two different visualizations.
 
 ```{r}
-ped.net <- ped_network(ped.living, studbook)
+ped.net  <- ped_network(ped.living, studbook)
 ped.vert <- ped.net %>% visHierarchicalLayout(direction = "UD", shakeTowards = "roots")
 ```
 
@@ -199,9 +164,8 @@ We will need information about founders still represented in the living populati
 
 ```{r}
 founder.summary <- founder_summary(pedig, ped.living, studbook)
-founder.vis <- founder.summary %>% studbook.react(., cols = founder.cols(.))
-
-save_reactable_test(founder.vis, paste0("StudbookB_", params$group, ".html"))
+founder.vis     <- founder.summary %>% studbook_react(., cols = founder.cols(.))
+save_reactable_test(founder.vis, "studbook_b.html")
 founder.vis
 ```
 
@@ -218,7 +182,6 @@ We will use the pedigree object to calculate an **inbreeding coefficient** for e
 
 ```{r}
 inbred.ped <- inbreeding(ped.living) %>% enframe(name = "ID", value = "inbred")
-
 inbred.ped
 ```
 
@@ -241,9 +204,9 @@ We can also extract some basic counts from our pedigree for each individual befo
 
 ```{r}
 living.summary <- family_history(ped.living, studbook) %>% 
-  studbook.react(., cols = living.cols(.), columnGroups = living.groups)
+  studbook_react(., cols = living.cols(.), columnGroups = living.groups)
 
-save_reactable_test(founder.vis, paste0("StudbookC_", params$group, ".html"))
+save_reactable_test(founder.vis, "studbook_c.html")
 living.summary
 ```
 
@@ -258,8 +221,8 @@ Now you can view a summary of the statistics we just calculated and compare them
 ```{r, out.width="100%"}
 kinship.summary <- kinship_summary(pedig, ped.living, studbook) %>%
   mutate(across(where(is.numeric), ~round(., digits = 3))) %>%
-  reactable(theme   = minty(font_size = 17), columns = kin.cols)
-save_reactable_test(kinship.summary, paste0("kin_", params$group, ".html"))
+  reactable(theme = minty(font_size = 17), columns = kin.cols)
+save_reactable_test(kinship.summary, "kinship_summary.html")
 kinship.summary
 ```
 
@@ -299,7 +262,6 @@ It is much easier to visualize pairwise relationships as matrices or multidimens
 kin.plot <- matrix.heatmap(living.kinship, 
                            "Kinship Across Living Population", 
                            "Kinship Coefficients")
-
 kin.plot
 ```
 
@@ -326,7 +288,7 @@ Once you choose some potential pairs, you should plug their ID's into the code c
 male   <- c("2652") # Replace the number here with the ID number of your male of interest.
 female <- c("2677") # Replace the number here with the ID number of your female of interest.
 
-pair <- c(male, female)
+pair   <- c(male, female)
 ```
 
 ## IBD and Kappa Coefficients
@@ -340,8 +302,7 @@ kappa.pair <- coeff_living %>%
   select(id1, id2, kappa0, kappa1, kappa2)
 
 kappa.tri <- showInTriangle(kappa.pair, plotType = "plotly")
-saveWidget(kappa.tri, paste0("kappaTriangle_", params$group, ".html"))
-
+saveWidget(kappa.tri, "kappaTriangle.html")
 print(kappa.pair)
 kappa.tri
 ```
@@ -365,8 +326,7 @@ Also, note that the subtitle of these plots now contains a printed summary produ
 pair.net <- subset_network_btp(ped.living, pair, studbook)
 pair.vert <- pair.net %>%
   visHierarchicalLayout(direction = "UD", shakeTowards = "roots")
-visSave(pair.vert, file = paste0("Pedigree_Hierarchical_PairLineage_", params$group, ".html"))
-
+visSave(pair.vert, file = "Pedigree_Hierarchical_PairLineage.html")
 pair.vert
 pair.net
 ```
@@ -488,5 +448,6 @@ living.summary
 >**Note**: For your summary you should write a few sentences explaining the choice you made. You may use a table format like this, a bulleted list, or a paragraph to present your proposed breeding pair(s).
 
 Add your text here.
+
 
 

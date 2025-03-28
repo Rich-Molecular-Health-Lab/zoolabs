@@ -13,20 +13,60 @@ knitr::opts_chunk$set(
 )
 ```
 
-# zoolabs
+# zoolabs <img src="man/figures/logo_richlab.png" align="right" height="138"/>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/aliciamrich/zoolabs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aliciamrich/zoolabs/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-Welcome to the zoolabs package. This package is for students taking Zoo Biology at UNO with Dr. Rich. It contains the necessary data, functions, and scripts to complete our lab modules.
+`zoolabs` is a teaching package for **Zoo Biology students at the University of Nebraska Omaha**, designed and maintained by Dr. Alicia Rich.
 
-## Installation
+This package includes all the **functions, datasets, color palettes, interactive tables, and plotting tools** needed to complete population management lab modules using R. It also supports `learnr` tutorials and Shiny-based apps for interactive learning.
 
-You can install the development version of zoolabs from [GitHub](https://github.com/) with:
+## \U0001F9F0 Features
 
-``` r
-# install.packages("pak")
-pak::pak("aliciamrich/zoolabs")
+- \U0001F9EC **Pedigree visualization** with `pedtools` and `visNetwork`
+- \U0001F4C8 **Population viability metrics** including lambda, life tables, and kinship
+- \U0001F4CA **Interactive demographic tables** using `reactable`
+- \U0001F3A8 **Standardized color palettes** for sex, status, and location
+- 📦 Supports `learnr` modules, R Markdown labs, and Shiny apps
+
+## 🚀 Installation
+
+To install the development version of **`zoolabs`** from GitHub, use:
+
+```{r}
+# install.packages("pak") # if not already installed
+pak::pak("Rich-Molecular-Health-Lab/zoolabs")
 ```
 
+> You'll only need to install this package once per machine. After installing, you can load it in any session with:
+
+```{r}
+library(zoolabs)
+```
+
+## \U0001F4D8 Usage
+
+Once installed, you’ll be able to:
+- Use all core functions like `plot_census()`, `lifeTab()`, and `ped_network()`
+- Load demo data like `studbook.tsv` via `system.file()`
+- Launch `learnr` tutorials using:
+
+```{r}
+learnr::run_tutorial("popdata", package = "zoolabs")
+```
+
+## \U0001F4CE Resources
+
+- Course Site: [rich-molecular-health-lab.github.io](https://github.com/Rich-Molecular-Health-Lab/rich-courses)
+- Issue Tracker: [GitHub Issues](https://github.com/Rich-Molecular-Health-Lab/zoolabs/issues)
+- Maintainer: [Alicia Rich](mailto:aliciarich@unomaha.edu)
+
+## \U0001F4C4 License
+
+This project is licensed under the **GPL-3** license.
+
+---
+
+_This package is intended for educational use by UNO students enrolled in BIOL 4130: Zoo Biology._
