@@ -17,13 +17,13 @@ interactive tables, and plotting tools** needed to complete population
 management lab modules using R. It also supports `learnr` tutorials and
 Shiny-based apps for interactive learning.
 
-## 001F9F0 Features
+## Features
 
-- 001F9EC **Pedigree visualization** with `pedtools` and `visNetwork`
-- 001F4C8 **Population viability metrics** including lambda, life
-  tables, and kinship
-- 001F4CA **Interactive demographic tables** using `reactable`
-- 001F3A8 **Standardized color palettes** for sex, status, and location
+- **Pedigree visualization** with `pedtools` and `visNetwork`
+- **Population viability metrics** including lambda, life tables, and
+  kinship
+- **Interactive demographic tables** using `reactable`
+- **Standardized color palettes** for sex, status, and location
 - 📦 Supports `learnr` modules, R Markdown labs, and Shiny apps
 
 ## 🚀 Installation
