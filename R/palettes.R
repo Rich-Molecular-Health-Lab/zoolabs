@@ -15,19 +15,23 @@
 #' @importFrom pedtools males
 #' @importFrom purrr list_assign
 set_ped_fills <- function(pedigree, studbook) {
-  female   <- intersect(living(studbook), females(pedigree))
-  male     <- intersect(living(studbook), males(pedigree))
-  undet    <- setdiff(living(studbook), union(females(pedigree), males(pedigree)))
+  female <- intersect(living(studbook), females(pedigree))
+  male   <- intersect(living(studbook), males(pedigree))
+  undet  <- setdiff(living(studbook), union(female, male))
 
-  fills        <- list(female, male, undet)
-  names(fills) <- keep_at(colors, c("f", "m", "u"))
+  fills <- list(f = female, m = male, u = undet)
 
   female.d <- intersect(deceased(studbook), females(pedigree))
   male.d   <- intersect(deceased(studbook), males(pedigree))
-  undet.d  <- setdiff(deceased(studbook), union(females(pedigree), males(pedigree)))
+  undet.d  <- setdiff(deceased(studbook), union(female.d, male.d))
 
-  ped.fills <- list("#D5328870" = female.d, "#3F459B70" = male.d, "#21B14B70" = undet.d)
-  fills     <- list_assign(fills, !!!ped.fills)
+  ped.fills <- list(
+    "#D5328870" = female.d,
+    "#3F459B70" = male.d,
+    "#21B14B70" = undet.d
+  )
+
+  fills <- list_assign(fills, !!!ped.fills)
   return(fills)
 }
 
@@ -53,29 +57,32 @@ set_plotly_pal <- function(palette) {
 #' @export
 #'
 #' @importFrom purrr map_depth
+#'
 lighten_palette <- function(palette, hex) {
   if (is.list(palette)) {
-    new <- map_depth(palette, 1, \(x) gsub("FF", hex, x))
+    new <- map_depth(palette, 1, ~ gsub("FF", hex, .x))
   } else {
     new <- gsub("FF", hex, palette)
   }
   return(new)
 }
 
-#' Lighten color palette for plotly usage
+#' Lighten a named vector of plotly colors
 #'
-#' @param palette A named vector of colors
-#' @param hex A two-character hex code representing transparency
-#' @return A named vector of lightened colors
+#' @param palette A named vector of hex colors
+#' @param hex A two-character hex code (e.g., "26" or "33")
+#' @return A modified vector of colors with lighter alpha values
 #' @export
+#'
 lighten_plotly_pal <- function(palette, hex = "33") {
   gsub("FF", hex, palette)
 }
 
-#' Define standardized color set for zoo biology plots
+#' Define default zoolabs color palette
 #'
-#' @return A named list of color hex codes
+#' @return A named list of core colors for use in plots, pedigrees, and tables
 #' @export
+#'
 palette_zoolabs <- function() {
   list(
     f    = "#D53288FF",

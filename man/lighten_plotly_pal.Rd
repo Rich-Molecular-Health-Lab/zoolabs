@@ -2,18 +2,18 @@
 % Please edit documentation in R/palettes.R
 \name{lighten_plotly_pal}
 \alias{lighten_plotly_pal}
-\title{Lighten color palette for plotly usage}
+\title{Lighten a named vector of plotly colors}
 \usage{
 lighten_plotly_pal(palette, hex = "33")
 }
 \arguments{
-\item{palette}{A named vector of colors}
+\item{palette}{A named vector of hex colors}
 
-\item{hex}{A two-character hex code representing transparency}
+\item{hex}{A two-character hex code (e.g., "26" or "33")}
 }
 \value{
-A named vector of lightened colors
+A modified vector of colors with lighter alpha values
 }
 \description{
-Lighten color palette for plotly usage
+Lighten a named vector of plotly colors
 }
