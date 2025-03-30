@@ -7,7 +7,11 @@ Authors@R:
 Description: This package contains the tools and templates used to complete different lab modules for the Zoo Biology course at UNO with Dr. Rich.
 Depends: R (>= 4.2)
 Imports: 
+    bslib,
     dplyr,
+    downloadthis,
+    DT,
+    ggplot2,
     glue,
     heatmaply,
     htmltools,
@@ -39,11 +43,9 @@ Imports:
 Suggests: 
     testthat, 
     conflicted,
-    downloadthis,
     kableExtra,
     fontawesome,
     here,
-    ggplot2,
     roxygen2, 
     knitr, 
     showtext,

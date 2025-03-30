@@ -4,10 +4,12 @@
 \alias{pedigree_nodes}
 \title{Generate node list for pedigree visNetwork plot}
 \usage{
-pedigree_nodes(pedigree, studbook)
+pedigree_nodes(pedigree, palette, studbook)
 }
 \arguments{
 \item{pedigree}{A pedigree object}
+
+\item{palette}{A color palette in list format}
 
 \item{studbook}{A studbook tibble}
 }

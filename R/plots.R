@@ -18,7 +18,6 @@ hline <- function(y = 0, color = "#444444") {
     line = list(color = color, width = 0.9, dash = "dot")
   )
 }
-
 #' Annotate lambda growth values with human-readable hover text
 #'
 #' @param df A data frame with a column `lambda`
@@ -49,29 +48,59 @@ annotate_lambda <- function(df) {
 #' @return A plotly plot object
 #' @export
 #'
-#' @importFrom htmlwidgets saveWidget
 #' @importFrom plotly add_trace
 #' @importFrom plotly layout
 #' @importFrom plotly plot_ly
 plot_census <- function(census_df, palette, title) {
-  fill.col <- lighten_plotly_pal(palette, "26")
+  fill.col <- lighten_plotly_pal(palette, 26)
 
-  plot <- plot_ly(census_df, x = ~Date, y = ~Unidentified, name = "Sex Unidentified",
-                  type = "scatter", mode = "lines", stackgroup = "one", hoveron = "points+fills",
-                  opacity = 0.5, line = list(color = palette$u, shape = "spline", smoothing = 0.8, width = 1.5),
-                  fillcolor = fill.col$u) %>%
-    add_trace(y = ~Females, name = "Females",
-              line = list(color = palette$f, shape = "spline", smoothing = 0.8, width = 1.5),
-              fillcolor = fill.col$f) %>%
-    add_trace(y = ~Males, name = "Males",
-              line = list(color = palette$m, shape = "spline", smoothing = 0.8, width = 1.5),
-              fillcolor = fill.col$m) %>%
-    layout(title = title,
+  plot <- plot_ly(census_df,
+                  x          = ~Date,
+                  y          = ~Unidentified,
+                  name       = "Sex Unidentified",
+                  type       = "scatter",
+                  mode       = "lines",
+                  stackgroup = "one",
+                  hoveron    = "points+fills",
+                  opacity    = 0.5,
+                  line       = list(
+                    color     = palette[["u"]],
+                    shape     = "spline",
+                    smoothing = 0.8,
+                    width     = 1.5),
+                  fillcolor   = fill.col[["u"]]) %>%
+    add_trace(y         = ~Females,
+              name      = "Females",
+              line      = list(
+                color     = palette[["f"]],
+                shape     = "spline",
+                smoothing = 0.8,
+                width     = 1.5),
+              fillcolor = fill.col[["f"]]) %>%
+    add_trace(y         = ~Males,
+              name      = "Males",
+              line      = list(
+                color     = palette[["m"]],
+                shape     = "spline",
+                smoothing = 0.8,
+                width     = 1.5),
+              fillcolor = fill.col[["m"]]) %>%
+    layout(title        = title,
            plot_bgcolor = "#ffffff",
-           yaxis = list(title = "Individuals Alive", showline = TRUE, showgrid = FALSE),
-           xaxis = list(title = "Date", showline = FALSE, showgrid = TRUE, rangeslider = list(visible = TRUE)))
-
-  htmlwidgets::saveWidget(plot, "PopulationTrends.html")
+           yaxis        = list(
+             title    = "Individuals Alive",
+             showline = TRUE,
+             showgrid = FALSE
+             ),
+           xaxis        = list(
+             title    = "Date",
+             showline = FALSE,
+             showgrid = TRUE,
+             rangeslider = list(
+               visible = TRUE
+               )
+             )
+           )
   return(plot)
 }
 
@@ -79,47 +108,161 @@ plot_census <- function(census_df, palette, title) {
 #'
 #' @param life_table A tibble with lambda values and Sex, CohortLabel columns
 #' @param title Plot title
+#' @param palette A color palette in list format
 #'
 #' @return A plotly object
 #' @export
 #'
-#' @importFrom htmlwidgets saveWidget
 #' @importFrom plotly layout
 #' @importFrom plotly plot_ly
-plot_lambda <- function(life_table, title) {
-  col.pal <- set_plotly_pal(colors)
-  fills   <- lighten_plotly_pal(col.pal, "33")
-
-  annotated <- lifeTab_static(life_table) %>% annotate_lambda()
-
+plot_lambda <- function(life_table, palette, title) {
+  col.pal    <- set_plotly_pal(palette)
+  fills      <- lighten_plotly_pal(col.pal, 33)
+  annotated  <- lifeTab_static(life_table) %>% annotate_lambda()
   annotation <- list(
-    x = 0.9, xref = "paper",
-    y = 1,   yref = "y",
-    text = "Stable if \u03BB = 1.0",
-    showarrow = TRUE, arrowhead = 4,
-    arrowcolor = "#444444", arrowsize = 1, arrowwidth = 0.7,
-    ax = 10, ay = 40,
-    font = list(color = "#444444", size = 12, style = "italic")
+    x          = 0.9,
+    xref       = "paper",
+    y          = 1,
+    yref       = "y",
+    text       = "Stable if \u03BB = 1.0",
+    showarrow  = TRUE,
+    arrowhead  = 4,
+    arrowcolor = "#444444",
+    arrowsize  = 1,
+    arrowwidth = 0.7,
+    ax         = 10,
+    ay         = 40,
+    font       = list(
+      color = "#444444",
+      size  = 12,
+      style = "italic"
+      )
   )
-
   plot <- plot_ly(annotated %>% filter(Sex != "Total"),
-                  x = ~CohortLabel, y = ~lambda, color = ~Sex,
-                  type = "scatter", mode = "lines+markers",
-                  colors = col.pal, text = ~hover_lambda,
+                  x           = ~CohortLabel,
+                  y           = ~lambda,
+                  color       = ~Sex,
+                  type        = "scatter",
+                  mode        = "lines+markers",
+                  colors      = col.pal,
+                  text        = ~hover_lambda,
                   connectgaps = TRUE,
-                  line = list(shape = "spline", width = 1.5),
-                  marker = list(size = 6, opacity = 0.7, line = list(width = 1))) %>%
-    layout(title = title,
-           barmode = "grouped",
+                  line        = list(
+                    shape     = "spline",
+                    smoothing = 0.8,
+                    width     = 1.5
+                    ),
+                  marker      = list(
+                    size    = 6,
+                    opacity = 0.7,
+                    line    = list(width = 1)
+                    )
+                  ) %>%
+    layout(title        = title,
            plot_bgcolor = "#ffffff",
-           shapes = list(hline(1.0)),
-           annotations = annotation,
-           yaxis = list(title = "Lambda (\u03BB)", zerolinewidth = 2, zerolinecolor = "black"),
-           xaxis = list(title = "Birth Cohort", zerolinewidth = 2, zerolinecolor = "black"))
-
-  htmlwidgets::saveWidget(plot, "Lambda_Cohorts.html")
+           shapes       = list(hline(1.0)),
+           annotations  = annotation,
+           yaxis        = list(
+             title    = "Lambda (\u03BB)",
+             showline = TRUE,
+             showgrid = FALSE
+             ),
+           xaxis        = list(
+             title    = "Birth Cohort",
+             showline = FALSE,
+             showgrid = TRUE
+             )
+           )
   return(plot)
 }
+
+# plot_helpers.R
+# Pedigree plot generator using pedtools::plot
+
+#' Plot a pedigree object using pedtools with custom formatting
+#'
+#' @param pedigree A single pedigree object (from `pedtools::ped()`)
+#' @param name A title for the plot (used as label)
+#' @param ped.palette A named list mapping individuals to colors by sex and status (from `zoolabs::set_ped_fills`)
+#' @param studbook A tibble with `ID`, `Sex`, `Status`, and other metadata
+#' @param ... Additional arguments passed to `pedtools::plot()`
+#'
+#' @return A pedigree plot (base graphics)
+#' @export
+#'
+#' @importFrom htmltools plotTag
+#'
+plot_pedigree <- function(pedigree, name, studbook, ped.palette, ...) {
+  deceased_ids <- deceased(studbook)
+  plotTag(
+   expr = plot(
+      pedigree,
+      title    = name,
+      cex      = 0.4,
+      deceased = deceased_ids,
+      labs     = NULL,
+      fill     = ped.palette,
+      lwd      = 0.3,
+      col      = "black",
+      pty      = "m",
+      ...
+    ),
+   alt    = "pedigree-plot",
+   width  = 600,
+   height = 600
+  )
+}
+#' Capture a pedigree plot for exporting an image file
+#'
+#' @param pedigree A single pedigree object (from `pedtools::ped()`)
+#' @param name A title for the plot (used as label)
+#' @param ped.palette A named list mapping individuals to colors by sex and status (from `zoolabs::set_ped_fills`)
+#' @param studbook A tibble with `ID`, `Sex`, `Status`, and other metadata
+#' @param ... Additional arguments passed to `pedtools::plot()`
+#'
+#' @return A pedigree plot (base graphics)
+#' @export
+#'
+#' @importFrom htmltools capturePlot
+#'
+capture_ped_file <- function(pedigree, name, studbook, ped.palette, ...) {
+  deceased_ids <- deceased(studbook)
+  pngpath      <- tempfile(fileext = ".png")
+  capturePlot(
+    expr = plot(
+      pedigree,
+      title    = name,
+      cex      = 0.4,
+      deceased = deceased_ids,
+      labs     = NULL,
+      fill     = ped.palette,
+      lwd      = 0.3,
+      col      = "black",
+      pty      = "m",
+      ...
+    ),
+    filename  = pngpath,
+    width     = 600,
+    height    = 600,
+    res       = 96
+  )
+}
+#' Plot a series of pedigree objects using pedtools with custom formatting
+#'
+#' @param ped.list A list of pedigree objects (from `pedtools::ped()`)
+#' @param palette A named list of color values
+#' @param studbook A tibble with `ID`, `Sex`, `Status`, and other metadata
+#' @param ... Additional arguments passed to `pedtools::plot()`
+#'
+#' @return A series of pedigree plots (base graphics)
+#' @export
+#'
+#' @importFrom purrr imap
+plot_ped_series <- function(ped.list, palette, studbook) {
+  ped.palette   <- set_ped_fills(ped.list, palette, studbook)
+  imap(ped.list, \(x, idx) plot_pedigree(x, idx, studbook, ped.palette))
+}
+
 #' Annotate kinship matrix with hover text for mating pair comparisons
 #'
 #' @param matrix A kinship matrix (usually filtered to living individuals)
@@ -183,8 +326,9 @@ annotate_kin_matrix <- function(matrix, pedigree.living, studbook) {
 #' @return A heatmaply widget
 #' @export
 #'
+#' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 theme
 #' @importFrom heatmaply heatmaply
-#' @importFrom htmlwidgets saveWidget
 #' @importFrom paletteer paletteer_d
 #' @importFrom stringr str_remove_all
 matrix.heatmap <- function(matrix, title, key.title, xlab = "Females", ylab = "Males") {
@@ -195,7 +339,7 @@ matrix.heatmap <- function(matrix, title, key.title, xlab = "Females", ylab = "M
     dendrogram       = "none",
     main             = title,
     scale            = "none",
-    colors           = paletteer::paletteer_d(colors$div),
+    colors           = paletteer::paletteer_d("rcartocolor::Temps"),
     margins          = c(60, 100, 40, 20),
     grid_color       = "white",
     grid_width       = 0.00001,
@@ -210,7 +354,6 @@ matrix.heatmap <- function(matrix, title, key.title, xlab = "Females", ylab = "M
     labRow           = rownames(matrix),
     heatmap_layers   = theme(axis.line = element_blank())
   )
-  htmlwidgets::saveWidget(plot, filename)
   return(plot)
 }
 

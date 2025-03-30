@@ -5,6 +5,7 @@
 #'
 #' @param pedigree A pedigree object created by `pedtools::ped()`
 #' @param studbook A tibble of studbook data
+#' @param palette A named list of color values
 #' @return A named list mapping individuals to colors by sex and status
 #' @export
 #'
@@ -14,17 +15,39 @@
 #' @importFrom pedtools females
 #' @importFrom pedtools males
 #' @importFrom purrr list_assign
-set_ped_fills <- function(pedigree, studbook) {
-  female <- intersect(living(studbook), females(pedigree))
-  male   <- intersect(living(studbook), males(pedigree))
-  undet  <- setdiff(living(studbook), union(female, male))
+#' @importFrom purrr keep_at
+set_ped_fills <- function(pedigree, palette, studbook) {
+  female <- intersect(
+    living(studbook),
+    females(pedigree)
+    )
+  male   <- intersect(
+    living(studbook),
+    males(pedigree)
+    )
+  undet  <- setdiff(
+    living(studbook),
+    union(female, male)
+    )
+  female.d <- intersect(
+    deceased(studbook),
+    females(pedigree)
+    )
+  male.d   <- intersect(
+    deceased(studbook),
+    males(pedigree)
+    )
+  undet.d  <- setdiff(
+    deceased(studbook),
+    union(female.d, male.d)
+    )
 
-  fills <- list(f = female, m = male, u = undet)
-
-  female.d <- intersect(deceased(studbook), females(pedigree))
-  male.d   <- intersect(deceased(studbook), males(pedigree))
-  undet.d  <- setdiff(deceased(studbook), union(female.d, male.d))
-
+  fills        <- list(female,
+                       male,
+                       undet)
+  names(fills) <- keep_at(palette,
+                          c("f", "m", "u")
+                          )
   ped.fills <- list(
     "#D5328870" = female.d,
     "#3F459B70" = male.d,
@@ -74,25 +97,12 @@ lighten_palette <- function(palette, hex) {
 #' @return A modified vector of colors with lighter alpha values
 #' @export
 #'
+#' @importFrom stats setNames
 lighten_plotly_pal <- function(palette, hex = "33") {
-  gsub("FF", hex, palette)
-}
-
-#' Define default zoolabs color palette
-#'
-#' @return A named list of core colors for use in plots, pedigrees, and tables
-#' @export
-#'
-palette_zoolabs <- function() {
-  list(
-    f    = "#D53288FF",
-    m    = "#3F459BFF",
-    u    = "#21B14BFF",
-    sire = "#3F459B33",
-    dam  = "#D5328833",
-    emph = "#DC8045FF",
-    seq  = "rcartocolor::Sunset",
-    div  = "rcartocolor::Temps",
-    rand = "khroma::stratigraphy"
-  )
+  if (is.list(palette)) {
+    palette <- unlist(palette)
+  }
+  # Replace only the trailing alpha component
+  palette <- gsub("([A-Fa-f0-9]{6})FF$", paste0("\\1", hex), palette)
+  stats::setNames(palette, names(palette))
 }

@@ -1,6 +1,44 @@
 # life_tables.R
 # Functions for calculating and formatting life tables
+# demography_helpers.R
+# Helper functions for life table metrics
 
+#' Estimate age at 50% survivorship (MLE age 1+)
+#'
+#' This function returns the age at which the first-life cohort (lx1)
+#' reaches 0.5 using linear interpolation between the nearest age classes.
+#'
+#' @param lx A vector of Lx values
+#' @param age A vector of corresponding ages
+#'
+#' @export
+#'
+#' @return A single numeric value representing the interpolated MLE age at lx1 = 0.5
+#' @keywords internal
+#' @importFrom dplyr filter mutate slice_min slice_max
+#' @importFrom tibble tibble
+MLE_age1 <- function(lx, age) {
+  df <- tibble(lx = lx, age = age) %>%
+    filter(age >= 1, !is.na(lx), lx > 0)
+
+  if (nrow(df) == 0) return(0)
+
+  lx1_start <- df$lx[1]
+  df <- df %>% mutate(lx1 = lx / lx1_start)
+
+  below <- df %>% filter(lx1 <= 0.5) %>% slice_min(order_by = age, n = 1, with_ties = FALSE)
+  above <- df %>% filter(lx1 >  0.5) %>% slice_max(order_by = age, n = 1, with_ties = FALSE)
+
+  if (nrow(below) == 0 || nrow(above) == 0) return(0)
+
+  ageLow  <- above$age[1]
+  ageHigh <- below$age[1]
+  lxLow   <- above$lx1[1]
+  lxHigh  <- below$lx1[1]
+
+  ageMLE1 <- ageLow + ((0.5 - lxLow) / (lxHigh - lxLow)) * (ageHigh - ageLow)
+  return(ageMLE1)
+}
 #' Build a full demographic life table from cohort data
 #'
 #' @param df A cohort-formatted tibble with Births, Nx, Age, Cohort
@@ -9,6 +47,7 @@
 #'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr group_by
+#' @importFrom dplyr join_by
 #' @importFrom dplyr if_else
 #' @importFrom dplyr lead
 #' @importFrom dplyr mutate
@@ -20,7 +59,9 @@
 lifeTab <- function(df) {
   df %>%
     arrange(Cohort, Age) %>%
-    mutate(across(c(Births, Nx), ~ replace_na(., 0)), RiskQx = Nx, RiskMx = Nx) %>%
+    mutate(across(c(Births, Nx), ~ replace_na(., 0)),
+           RiskQx = Nx,
+           RiskMx = Nx) %>%
     group_by(Cohort) %>%
     mutate(
       Deaths = if_else(Age == max(Age), Nx, Nx - lead(Nx)),
@@ -72,25 +113,28 @@ lifeTab <- function(df) {
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr count
 #' @importFrom dplyr group_by
+#' @importFrom dplyr n
 #' @importFrom dplyr summarise
 cohort_lifeTab <- function(timeline, studbook, minYear, maxYear, span, maxAge) {
   life.table.sexes <- count_births(timeline, studbook) %>%
-    count(BirthYear, Sex, Age, name = "Nx") %>%
-    group_by(BirthYear, Sex, Age) %>%
-    summarise(Births = sum(Births), .groups = "drop") %>%
+    summarize(Births = sum(Births),
+              Nx     = n(),
+              .by    = c(BirthYear, Sex, Age)) %>%
     make_cohorts(minYear = minYear, maxYear = maxYear, span = span, maxAge = maxAge, include_sex = TRUE) %>%
-    group_by(CohortLabel, BirthCohort, Sex, Cohort, Age) %>%
-    summarise(Births = sum(Births), Nx = sum(Nx), .groups = "drop") %>%
+    summarize(Births = sum(Births),
+              Nx      = sum(Nx),
+              .by     = c(CohortLabel, BirthCohort, Sex, Cohort, Age)) %>%
     arrange(BirthCohort, Sex, Age) %>%
     lifeTab()
 
   life.table.totals <- count_births(timeline, studbook) %>%
-    count(BirthYear, Age, name = "Nx") %>%
-    group_by(BirthYear, Age) %>%
-    summarise(Births = sum(Births), .groups = "drop") %>%
+    summarize(Births = sum(Births),
+              Nx     = n(),
+              .by    = c(BirthYear, Age)) %>%
     make_cohorts(minYear = minYear, maxYear = maxYear, span = span, maxAge = maxAge, include_sex = FALSE) %>%
-    group_by(CohortLabel, BirthCohort, Cohort, Sex, Age) %>%
-    summarise(Births = sum(Births), Nx = sum(Nx), .groups = "drop") %>%
+    summarize(Births = sum(Births),
+              Nx      = sum(Nx),
+              .by     = c(CohortLabel, BirthCohort, Cohort, Sex, Age)) %>%
     arrange(BirthCohort, Age) %>%
     lifeTab()
 

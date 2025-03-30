@@ -4,10 +4,12 @@
 \alias{plot_lambda}
 \title{Plot lambda growth rates by cohort}
 \usage{
-plot_lambda(life_table, title)
+plot_lambda(life_table, palette, title)
 }
 \arguments{
 \item{life_table}{A tibble with lambda values and Sex, CohortLabel columns}
+
+\item{palette}{A color palette in list format}
 
 \item{title}{Plot title}
 }

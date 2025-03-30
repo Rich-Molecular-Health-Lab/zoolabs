@@ -4,10 +4,12 @@
 \alias{ped_network}
 \title{Build visNetwork visualization of a pedigree}
 \usage{
-ped_network(pedigree, studbook)
+ped_network(pedigree, palette, studbook)
 }
 \arguments{
 \item{pedigree}{A pedigree object}
+
+\item{palette}{A color palette in list format}
 
 \item{studbook}{A studbook tibble}
 }

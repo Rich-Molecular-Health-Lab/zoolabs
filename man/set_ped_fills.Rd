@@ -4,10 +4,12 @@
 \alias{set_ped_fills}
 \title{Generate fill color mapping for pedigree plots}
 \usage{
-set_ped_fills(pedigree, studbook)
+set_ped_fills(pedigree, palette, studbook)
 }
 \arguments{
 \item{pedigree}{A pedigree object created by \code{pedtools::ped()}}
+
+\item{palette}{A named list of color values}
 
 \item{studbook}{A tibble of studbook data}
 }

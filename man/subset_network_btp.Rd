@@ -4,10 +4,12 @@
 \alias{subset_network_btp}
 \title{Subset pedigree network to visualize match lineage}
 \usage{
-subset_network_btp(pedigree.living, pair, studbook)
+subset_network_btp(pedigree.living, palette, pair, studbook)
 }
 \arguments{
 \item{pedigree.living}{A pedigree object for the living population}
+
+\item{palette}{A color palette in list format}
 
 \item{pair}{A character vector of two individual IDs (male, female)}
 

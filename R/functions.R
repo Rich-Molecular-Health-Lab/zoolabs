@@ -1,6 +1,35 @@
 # functions.R
 # Core demographic and pedigree calculation functions
 #
+#' Import studbook demo data
+#'
+#' @return Studbook tibble for use in tutorial script
+#' @export
+#'
+#' @importFrom dplyr across
+#' @importFrom dplyr mutate
+#' @importFrom lubridate ymd
+#' @importFrom magrittr %>%
+#' @importFrom readr read_tsv
+load_studbook <- function() {
+  read_tsv(system.file("extdata", "studbook.tsv", package = "zoolabs")) %>%
+    mutate(across(c(DateBirth, DateDeath),  ~ymd(.)))
+}
+
+#' Import timeline demo data
+#'
+#' @return Timeline tibble for use in tutorial script
+#' @export
+#'
+#' @importFrom dplyr across
+#' @importFrom dplyr mutate
+#' @importFrom lubridate ymd
+#' @importFrom magrittr %>%
+#' @importFrom readr read_tsv
+load_timeline <- function() {
+  read_tsv(system.file("extdata", "timeline.tsv", package = "zoolabs")) %>%
+    mutate(across(c(StartLoc, Date, EndLoc), ~ ymd(.)))
+}
 #' Calculate age in years
 #'
 #' @param birth Date of birth
@@ -74,6 +103,7 @@ living.females <- function(studbook) {
 #' @importFrom dplyr case_when
 #' @importFrom dplyr filter
 #' @importFrom dplyr full_join
+#' @importFrom dplyr join_by
 #' @importFrom dplyr mutate
 #' @importFrom dplyr relocate
 #' @importFrom dplyr right_join
@@ -190,22 +220,39 @@ count_births <- function(timeline, studbook) {
     select(ID, Date) %>%
     distinct() %>%
     mutate(Year = year(Date)) %>%
-    count(ID, Year, name = "Births")
+    summarize(Births = n(), .by = c(ID, Year))
 
   counts <- studbook %>%
-    select(ID, Sex, BirthYear, Start = DateBirth, End = DateDeath) %>%
-    filter(Sex != "U") %>%
-    mutate(
-      Start = floor_date(Start, "years"),
-      End   = if_else(!is.na(End), floor_date(End, "years"), floor_date(today(), "years")),
-      Years = map2(Start, End, ~ seq(.x, .y, by = "year"))
+    select(
+      ID,
+      Sex,
+      BirthYear,
+      Start     = DateBirth,
+      End       = DateDeath
     ) %>%
+    filter(Sex != "U") %>%
+    mutate(Start = floor_date(Start, "years"),
+           End   = if_else(!is.na(End),
+                           floor_date(End, "years"),
+                           floor_date(today(), "years"))
+    ) %>%
+    mutate(Years = pmap(list(Start, End), \(x, y) seq(x, y, by = "years"))) %>%
     unnest(Years) %>%
-    mutate(Year = year(Years), Age = calculate_age(Start, Years)) %>%
-    select(ID, BirthYear, Sex, Age, Year) %>%
-    left_join(births, by = c("ID", "Year")) %>%
+    mutate(Year = year(Years),
+           Age  = calculate_age(Start, Years)) %>%
+    select(ID,
+           Sex,
+           BirthYear,
+           Age,
+           Year) %>%
+    left_join(births, by = join_by(ID, Year)) %>%
     mutate(Births = replace_na(Births, 0)) %>%
-    distinct()
+    distinct() %>%
+    select(ID,
+           BirthYear,
+           Sex,
+           Age,
+           Births)
 }
 
 #' Generate census summary by sex over time
@@ -216,36 +263,51 @@ count_births <- function(timeline, studbook) {
 #' @return A wide-format census summary with counts per sex and date
 #' @export
 #'
+#' @importFrom dplyr across
 #' @importFrom dplyr arrange
 #' @importFrom dplyr count
 #' @importFrom dplyr distinct
 #' @importFrom dplyr filter
 #' @importFrom dplyr left_join
+#' @importFrom dplyr join_by
 #' @importFrom dplyr mutate
+#' @importFrom dplyr n
 #' @importFrom dplyr rename
 #' @importFrom dplyr row_number
 #' @importFrom dplyr select
 #' @importFrom lubridate ceiling_date
 #' @importFrom lubridate floor_date
 #' @importFrom purrr map2
+#' @importFrom purrr pmap
 #' @importFrom tidyr pivot_wider
 #' @importFrom tidyr unnest
+#' @importFrom tidyselect where
 census <- function(timeline, studbook, period) {
   counts <- timeline %>%
     filter(TypeEvent %in% c("Birth", "End")) %>%
-    distinct(ID, Date, event) %>%
-    pivot_wider(id_cols = ID, names_from = TypeEvent, values_from = Date) %>%
-    mutate(
-      Birth = floor_date(Birth, period),
-      End   = ceiling_date(End, period),
-      Dates = map2(Birth, End, ~ seq(.x, .y, by = period))
-    ) %>%
+    distinct(ID, Date, TypeEvent) %>%
+    pivot_wider(id_cols     = "ID",
+                names_from  = "TypeEvent",
+                values_from = "Date") %>%
+    distinct() %>%
+    mutate(Birth = floor_date(Birth, "years"),
+           End   = ceiling_date(End, "years")) %>%
+    mutate(Dates = pmap(list(Birth, End), \(x, y) seq(x, y, by = "year"))) %>%
     unnest(Dates) %>%
+    select(ID, Date = Dates) %>%
     mutate(Age = row_number() - 1, .by = ID) %>%
-    left_join(studbook %>% select(ID, Sex), by = "ID") %>%
-    count(Sex, Date = Dates, name = "N") %>%
-    pivot_wider(names_from = Sex, values_from = N, values_fill = 0) %>%
-    rename(Females = F, Males = M, Unidentified = U) %>%
-    arrange(Date)
+    left_join(select(studbook,
+                     ID,
+                     Sex), by = join_by(ID)) %>%
+    summarize(N = n(), .by = c(Sex, Date)) %>%
+    distinct() %>%
+    arrange(Date) %>%
+    pivot_wider(id_cols     = "Date",
+                names_from  = "Sex",
+                values_from = "N") %>%
+    rename(Females      = F,
+           Males        = M,
+           Unidentified = U) %>%
+    mutate(across(where(is.numeric), ~ replace_na(., 0)))
   return(counts)
 }
